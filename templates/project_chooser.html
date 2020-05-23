@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+
+    <head>
+        <title>Direktkrediteportal - Projektauswahl</title>
+        <link rel="stylesheet" href="/public/css/red.css">
+        <script type="text/javascript" src="/public/jquery/jquery.min.js"></script>
+        <script type="text/javascript" src="/public/bootstrap/bootstrap.bundle.min.js"></script>
+    </head>
+
+    <body>
+    <!--     <div class="navbar navbar-expand-lg navbar-default"><a class="navbar-brand" href="#">Direktkrediteportal</a><button class="navbar-toggler collapsed" type="button" data-toggle="collapse" data-target="#dropdown_menu" aria-expanded="false" aria-controls="navbar"><span class="sr-only">Toggle navigation</span><span class="navbar-toggler-icon"></span></button>
+            <div
+                class="collapse navbar-collapse" id="dropdown_menu">
+                <ul class="nav navbar-nav">
+                    <li class="nav-item"><a class="nav-link" href="/project"> <span class="fa fa-th-large"></span><span> Projekt auswählen</span></a></li>
+                </ul>
+            </div>
+        </div>
+     -->    <div class="container-fluid col-xl-8 col-xl-offset-2 col-lg-12" id="root-container">
+            <div class="jumbotron">
+                <h2>Lieber Tausend Freund*innen im Rücken, als eine Bank im Nacken!</h2>
+                <p class="lead">Willkommen bei der Direktkrediteplattform, bitte wähle das Projekt aus, das du unterstützt hast!</p>
+            </div>
+            <div class="row">
+                {% for project in platform.projects -%}
+                <div class="col-lg-3 col-sm-6 col-xs-12">
+                    <a class="project-link" href="https://{{ projects[project]['url'] }}">
+                        <div class="card project-card"><img class="card-img-top" src="https://{{ projects[project]['url'] }}{{ projectConfigs[project].logo }}" style="height: 100px; width: auto; object-fit: contain; ">
+                            <div class="card-body text-center">
+                                <h5 class="card-title">{{ projectConfigs[project].projectname }}</h5>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </body>
+
+</html>

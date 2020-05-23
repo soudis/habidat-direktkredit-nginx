@@ -1,0 +1,6 @@
+config
+static
+certs
+conf.d
+docker-compose.yml
+projects.json

@@ -1,0 +1,41 @@
+version: '3'
+
+networks:
+  proxy:
+    external:
+      name: direktkredit-proxy
+
+volumes:
+  certbot-config:
+  certcot-www:
+
+services:
+
+  nginx:
+    image: habidat/direktkredit
+    restart: unless-stopped
+    volumes:
+      - certbot-config:/habidat/certbot
+      - certcot-www:/habidat/static/certbot
+      - ./projects.json:/habidat/projects.json
+    environment:
+      - SSL_PROVIDER=certbot
+    ports:
+      - 80:80
+      - 443:443
+    networks:
+      - proxy
+    logging:
+      options:
+        max-size: 50m    
+
+  certbot:
+    image: certbot/certbot
+    restart: unless-stopped
+    volumes:
+      - certbot-config:/etc/letsencrypt
+      - certcot-www:/var/www/certbot
+    entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"      
+    logging:
+      options:
+        max-size: 50m    
