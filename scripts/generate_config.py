@@ -6,6 +6,10 @@ from urllib.request import urlopen
 
 try: 
 
+	log = logging.getLogger()
+	log.addHandler(logging.StreamHandler(sys.stdout))
+	log.setLevel(logging.INFO)
+
 	file_loader = FileSystemLoader('templates')
 	env = Environment(loader=file_loader)
 
@@ -45,9 +49,9 @@ try:
 		try:
 			response = urlopen('http://%s/projectconfig' % projects[projectId]['container'])
 		except HTTPError as e:
-			logging.warning("HTTP error: " + 'http://%s/projectconfig' % projects[projectId]['container'])
+			log.warning("HTTP error: " + 'http://%s/projectconfig' % projects[projectId]['container'])
 		except URLError as e:
-			logging.warning("Server not found: " + 'http://%s/projectconfig' % projects[projectId]['container'])
+			log.warning("Server not found: " + 'http://%s/projectconfig' % projects[projectId]['container'])
 		else:
 			projectConfig = json.loads(response.read())
 			projectConfigs[projectId] = projectConfig
@@ -58,7 +62,7 @@ try:
 
 	# generate nginx configuration and html templates
 	for projectId in projects:
-		logging.info('Generate single project site %s' % projectId)
+		log.info('Generate single project site %s' % projectId)
 		template = env.get_template('nginx_single.conf')
 		filename = 'dk_' + projects[projectId]['url'] + '.conf'
 		template.stream(sslProvider=os.environ['SSL_PROVIDER'], url=projects[projectId]['url'], container=projects[projectId]['container']).dump(nginxTmpDir + filename)
@@ -67,7 +71,7 @@ try:
 	for platformId, platform in platforms.items():
 
 		# if there are multiple projects per site => create project selection page
-		logging.info('Generate project platform %s' % platformId)
+		log.info('Generate project platform %s' % platformId)
 		template = env.get_template('nginx_platform.conf')
 		filename = 'dk_' + platformId + '.conf'
 		template.stream(sslProvider=os.environ['SSL_PROVIDER'], url=platformId, anyContainer=projects[next(iter(platform['projects']))]['container']).dump(nginxTmpDir + filename)
@@ -98,5 +102,5 @@ try:
 		subprocess.call(['nginx', '-s', 'reload'], stderr=subprocess.PIPE)
 
 except Exception as e:
-	logging.error('Unhandled exception')
-	logging.error(traceback.format_exc())
+	log.error('Unhandled exception')
+	log.error(traceback.format_exc())
