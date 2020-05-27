@@ -47,11 +47,9 @@ try:
 				else:
 					platforms[platform] = { 'projects': [projectId] }		
 		try:
-			response = urlopen('http://%s/projectconfig' % projects[projectId]['container'])
-		except HTTPError as e:
-			log.warning("HTTP error: " + 'http://%s/projectconfig' % projects[projectId]['container'])
+			response = urlopen('http://%s:8080/projectconfig' % projects[projectId]['container'])
 		except URLError as e:
-			log.warning("Server not found: " + 'http://%s/projectconfig' % projects[projectId]['container'])
+			log.warning("Server not found: " + 'http::8080///%s/projectconfig' % projects[projectId]['container'])
 		else:
 			projectConfig = json.loads(response.read())
 			projectConfigs[projectId] = projectConfig
