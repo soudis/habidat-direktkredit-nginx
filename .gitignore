@@ -1,6 +1,6 @@
 config
 static
 cert
-conf.d
+./conf.d
 docker-compose.yml
 projects.json
