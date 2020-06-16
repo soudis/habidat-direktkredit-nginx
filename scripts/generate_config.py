@@ -59,7 +59,7 @@ try:
 	    json.dump(projectConfigs, outfile)
 
 	# generate nginx configuration and html templates
-	for siteUrl, site in sites.items()
+	for siteUrl, site in sites.items():
 		if len(site.projects) == 1:
 			projectId = site.projects[0]
 			log.info('Generate single project site %s' % projectId)
