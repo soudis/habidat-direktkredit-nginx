@@ -3,6 +3,7 @@
 from jinja2 import Environment, FileSystemLoader
 import json,  os, filecmp, sys, shutil, subprocess, logging, traceback
 from urllib.request import urlopen
+from urllib.error import URLError
 
 try: 
 
@@ -49,7 +50,7 @@ try:
 		try:
 			response = urlopen('http://%s:8080/projectconfig' % projects[projectId]['container'])
 		except URLError as e:
-			log.warning("Server not found: " + 'http::8080///%s/projectconfig' % projects[projectId]['container'])
+			log.warning("Server not found: " + 'http://%s:8080/projectconfig' % projects[projectId]['container'])
 		else:
 			projectConfig = json.loads(response.read())
 			projectConfigs[projectId] = projectConfig
@@ -72,7 +73,7 @@ try:
 		log.info('Generate project platform %s' % platformId)
 		template = env.get_template('nginx_platform.conf')
 		filename = 'dk_' + platformId + '.conf'
-		template.stream(sslProvider=os.environ['SSL_PROVIDER'], url=platformId, anyContainer=projects[next(iter(platform['projects']))]['container']).dump(nginxTmpDir + filename)
+		template.stream(platform=platform, projects=projects, sslProvider=os.environ['SSL_PROVIDER'], url=platformId, anyContainer=projects[next(iter(platform['projects']))]['container']).dump(nginxTmpDir + filename)
 		template = env.get_template('project_chooser.html')
 		index_file = open(htmlDir + platformId + '.html', "w")
 		index_file.write(
