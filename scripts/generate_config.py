@@ -38,15 +38,14 @@ try:
 	#print(projects)	
 
 	# build platforms dictionary
-	platforms = {}
+	sites = {}
 	projectConfigs = {}
 	for projectId in projects:
-		if 'platforms' in projects[projectId]:
-			for platform in projects[projectId]['platforms']:
-				if platform in platforms:
-					platforms[platform]['projects'].append(projectId)
-				else:
-					platforms[platform] = { 'projects': [projectId] }		
+		for url in projects[projectId]['urls']:
+			if url in sites:
+				sites[url]['projects'].append(projectId)
+			else:
+				sites[url] = { 'projects': [projectId] }		
 		try:
 			response = urlopen('http://%s:8080/projectconfig' % projects[projectId]['container'])
 		except URLError as e:
@@ -60,26 +59,24 @@ try:
 	    json.dump(projectConfigs, outfile)
 
 	# generate nginx configuration and html templates
-	for projectId in projects:
-		log.info('Generate single project site %s' % projectId)
-		template = env.get_template('nginx_single.conf')
-		filename = 'dk_' + projects[projectId]['url'] + '.conf'
-		template.stream(sslProvider=os.environ['SSL_PROVIDER'], url=projects[projectId]['url'], container=projects[projectId]['container']).dump(nginxTmpDir + filename)
-
-
-	for platformId, platform in platforms.items():
-
-		# if there are multiple projects per site => create project selection page
-		log.info('Generate project platform %s' % platformId)
-		template = env.get_template('nginx_platform.conf')
-		filename = 'dk_' + platformId + '.conf'
-		template.stream(platform=platform, projects=projects, sslProvider=os.environ['SSL_PROVIDER'], url=platformId, anyContainer=projects[next(iter(platform['projects']))]['container']).dump(nginxTmpDir + filename)
-		template = env.get_template('project_chooser.html')
-		index_file = open(htmlDir + platformId + '.html', "w")
-		index_file.write(
-		    template.render(platform=platform, projects=projects, projectConfigs=projectConfigs)
-		)
-		index_file.close()
+	for siteUrl, site in sites.items()
+		if len(site.projects) == 1:
+			projectId = site.projects[0]
+			log.info('Generate single project site %s' % projectId)
+			template = env.get_template('nginx_single.conf')
+			filename = 'dk_' + siteUrl + '.conf'
+			template.stream(sslProvider=os.environ['SSL_PROVIDER'], url=siteUrl, container=projects[projectId]['container']).dump(nginxTmpDir + filename)
+		else:
+			log.info('Generate project platform %s' % siteUrl)
+			template = env.get_template('nginx_platform.conf')
+			filename = 'dk_' + siteUrl + '.conf'
+			template.stream(platform=site, projects=projects, sslProvider=os.environ['SSL_PROVIDER'], url=siteUrl, anyContainer=projects[next(iter(platform['projects']))]['container']).dump(nginxTmpDir + filename)
+			template = env.get_template('project_chooser.html')
+			index_file = open(htmlDir + siteUrl + '.html', "w")
+			index_file.write(
+			    template.render(platform=site, projects=projects, projectConfigs=projectConfigs)
+			)
+			index_file.close()
 
 	# compare new config 
 	nginxChanged = False

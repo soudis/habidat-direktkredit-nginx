@@ -9,17 +9,13 @@ try:
 	log.setLevel(logging.INFO)
 
 	if len(sys.argv) < 4:
-		log.info('Usage: update_project.py <project identifier> <container name> <url> [<platform url>] [<platform url>] ...')
+		log.info('Usage: update_project.py <project identifier> <container name> <url> [<url>] [<url>] ...')
 		exit(1)
 
 	projectId = sys.argv[1]
 	containerName = sys.argv[2]
-	projectURL = sys.argv[3]
-	projectPlatforms = []
-
-	if len(sys.argv) > 4:
-		projectPlatforms = sys.argv[4:]
-
+	projectURLs = sys.argv[3:]
+	
 	projects = {}
 	if os.path.isfile("projects.json"):
 		with open("projects.json","r") as json_file:
@@ -29,7 +25,7 @@ try:
 		log.error('Project ' + sys.argv[1] + ' does not exist')
 		exit(1)
 
-	projects[projectId] = {"container": containerName, "url": projectURL, "platforms": projectPlatforms}
+	projects[projectId] = {"container": containerName, "urls": projectURLs}
 
 	with open('projects.json', 'w') as outfile:
 		json.dump(projects, outfile)
