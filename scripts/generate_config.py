@@ -60,8 +60,8 @@ try:
 
 	# generate nginx configuration and html templates
 	for siteUrl, site in sites.items():
-		if len(site.projects) == 1:
-			projectId = site.projects[0]
+		if len(site['projects']) == 1:
+			projectId = site['projects'][0]
 			log.info('Generate single project site %s' % projectId)
 			template = env.get_template('nginx_single.conf')
 			filename = 'dk_' + siteUrl + '.conf'
@@ -70,11 +70,11 @@ try:
 			log.info('Generate project platform %s' % siteUrl)
 			template = env.get_template('nginx_platform.conf')
 			filename = 'dk_' + siteUrl + '.conf'
-			template.stream(platform=site, projects=projects, sslProvider=os.environ['SSL_PROVIDER'], url=siteUrl, anyContainer=projects[next(iter(platform['projects']))]['container']).dump(nginxTmpDir + filename)
+			template.stream(platform=site, projects=projects, sslProvider=os.environ['SSL_PROVIDER'], url=siteUrl, anyContainer=projects[next(iter(site['projects']))]['container']).dump(nginxTmpDir + filename)
 			template = env.get_template('project_chooser.html')
 			index_file = open(htmlDir + siteUrl + '.html', "w")
 			index_file.write(
-			    template.render(platform=site, projects=projects, projectConfigs=projectConfigs)
+			    template.render(platform=site, url=siteUrl, projects=projects, projectConfigs=projectConfigs)
 			)
 			index_file.close()
 
