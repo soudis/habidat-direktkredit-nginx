@@ -59,7 +59,9 @@ try:
 	    json.dump(projectConfigs, outfile)
 
 	# generate nginx configuration and html templates
+	domains = []
 	for siteUrl, site in sites.items():
+		domains.append(siteUrl)
 		if len(site['projects']) == 1:
 			projectId = site['projects'][0]
 			log.info('Generate single project site %s' % projectId)
@@ -77,6 +79,11 @@ try:
 			    template.render(platform=site, url=siteUrl, projects=projects, projectConfigs=projectConfigs)
 			)
 			index_file.close()
+
+	domainsString = ','.join(urls)
+
+	with open('domains.txt', 'w') as outfile:
+	    outfile.write(domainsString)
 
 	# compare new config 
 	nginxChanged = False
