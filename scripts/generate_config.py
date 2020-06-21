@@ -80,7 +80,7 @@ try:
 			)
 			index_file.close()
 
-	domainsString = ','.join(urls)
+	domainsString = ','.join(domains)
 
 	with open('domains.txt', 'w') as outfile:
 	    outfile.write(domainsString)
