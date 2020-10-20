@@ -18,6 +18,7 @@ services:
       - certbot-config:/habidat/certbot
       - certcot-www:/habidat/static/certbot
       - ./projects.json:/habidat/projects.json
+      - ./platforms.json:/habidat/platforms.json
     environment:
       - SSL_PROVIDER=certbot
     ports:

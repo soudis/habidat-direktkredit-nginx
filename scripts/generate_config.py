@@ -35,6 +35,12 @@ try:
 		with open('projectConfigs.json', 'r') as json_file:
 		  projectConfigs = json.load(json_file)	
 
+	platformConfigs = {}
+	# load optinal platform configs (if exists)
+	if os.path.isfile("platforms.json"):
+		with open('platforms.json', 'r') as json_file:
+		  platformConfigs = json.load(json_file)			  
+
 	#print(projects)	
 
 	# build platforms dictionary
@@ -75,8 +81,11 @@ try:
 			template.stream(platform=site, projects=projects, sslProvider=os.environ['SSL_PROVIDER'], url=siteUrl, anyContainer=projects[next(iter(site['projects']))]['container']).dump(nginxTmpDir + filename)
 			template = env.get_template('project_chooser.html')
 			index_file = open(htmlDir + siteUrl + '.html', "w")
+			platformConfig = 'default'
+			if siteUrl in platformConfigs:
+				platformConfig = platformConfigs[siteUrl]
 			index_file.write(
-			    template.render(platform=site, url=siteUrl, projects=projects, projectConfigs=projectConfigs)
+			    template.render(platform=site, url=siteUrl, platformConfig=platformConfig, projects=projects, projectConfigs=projectConfigs)
 			)
 			index_file.close()
 

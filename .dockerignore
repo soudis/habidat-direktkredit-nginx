@@ -2,3 +2,4 @@ config
 static
 certs
 projects.json
+platforms.json

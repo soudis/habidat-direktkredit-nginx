@@ -4,3 +4,4 @@ cert
 ./conf.d
 docker-compose.yml
 projects.json
+platforms.json

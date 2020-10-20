@@ -19,8 +19,13 @@
         </div>
      -->    <div class="container-fluid col-xl-8 col-xl-offset-2 col-lg-12" id="root-container">
             <div class="jumbotron">
+                {% if platformConfig == 'default' %}
                 <h2>Lieber Tausend Freund*innen im Rücken, als eine Bank im Nacken!</h2>
                 <p class="lead">Willkommen bei der Direktkrediteplattform, bitte wähle das Projekt aus, das du unterstützt hast!</p>
+                {% else %}
+                <h2>{{ platformConfig.title }}</h2>
+                <p class="lead">{{ platformConfig.subTitle }}</p>                
+                {% endif %}
             </div>
             <div class="row">
                 {% for project in platform.projects -%}
