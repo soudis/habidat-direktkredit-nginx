@@ -31,7 +31,7 @@
                 {% for project in platform.projects -%}
                 <div class="col-lg-3 col-sm-6 col-xs-12">
                     <a class="project-link" href="https://{{ url }}/{{ project }}">
-                        <div class="card project-card"><img class="card-img-top" src="https://{{ url }}/{{ project }}{{ projectConfigs[project].logo }}" style="height: 100px; width: auto; object-fit: contain; ">
+                        <div class="card project-card"><img class="card-img-top" src="https://{{ url }}/{{ project }}{{ projectConfigs[project].logo_select or projectConfigs[project].logo }}" style="height: 100px; width: auto; object-fit: contain; ">
                             <div class="card-body text-center">
                                 <h5 class="card-title">{{ projectConfigs[project].projectname }}</h5>
                             </div>
