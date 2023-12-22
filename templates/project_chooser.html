@@ -1,14 +1,17 @@
 <!DOCTYPE html>
 <html>
+  <head>
+    <title>Direktkrediteportal - Projektauswahl</title>
+    <link rel="stylesheet" href="/public/css/turquoise.css" />
+    <script type="text/javascript" src="/public/jquery/jquery.min.js"></script>
+    <script
+      type="text/javascript"
+      src="/public/bootstrap/bootstrap.bundle.min.js"
+    ></script>
+    <script type="text/javascript" src="/search.js"></script>
+  </head>
 
-    <head>
-        <title>Direktkrediteportal - Projektauswahl</title>
-        <link rel="stylesheet" href="/public/css/red.css">
-        <script type="text/javascript" src="/public/jquery/jquery.min.js"></script>
-        <script type="text/javascript" src="/public/bootstrap/bootstrap.bundle.min.js"></script>
-    </head>
-
-    <body>
+  <body>
     <!--     <div class="navbar navbar-expand-lg navbar-default"><a class="navbar-brand" href="#">Direktkrediteportal</a><button class="navbar-toggler collapsed" type="button" data-toggle="collapse" data-target="#dropdown_menu" aria-expanded="false" aria-controls="navbar"><span class="sr-only">Toggle navigation</span><span class="navbar-toggler-icon"></span></button>
             <div
                 class="collapse navbar-collapse" id="dropdown_menu">
@@ -17,30 +20,62 @@
                 </ul>
             </div>
         </div>
-     -->  <div class="container-fluid col-xl-8 col-xl-offset-2 col-lg-12" id="root-container">
-            <div class="jumbotron">
-                {% if platformConfig == 'default' %}
-                <h2>Lieber Tausend Freund*innen im Rücken, als eine Bank im Nacken!</h2>
-                <p class="lead">Willkommen bei der Direktkrediteplattform, bitte wähle das Projekt aus, das du unterstützt hast!</p>
-                {% else %}
-                <h2>{{ platformConfig.title }}</h2>
-                <p class="lead">{{ platformConfig.subTitle }}</p>                
-                {% endif %}
-            </div>
-            <div class="row">
-                {% for project in platform.projects -%}
-                <div class="col-lg-3 col-sm-6 col-xs-12">
-                    <a class="project-link" href="https://{{ url }}/{{ project }}">
-                        <div class="card project-card"><img class="card-img-top" src="https://{{ url }}/{{ project }}{{ projectConfigs[project].logo_select or projectConfigs[project].logo }}" style="height: 100px; width: auto; object-fit: contain; ">
-                            <div class="card-body text-center">
-                                <h5 class="card-title">{{ projectConfigs[project].projectname }}</h5>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-                {% endfor %}
-            </div>
+     -->
+    <div
+      class="container-fluid col-xl-8 col-xl-offset-2 col-lg-12"
+      id="root-container"
+    >
+      <div class="jumbotron">
+        {% if platformConfig == 'default' %}
+        <h2>Lieber Tausend Freund*innen im Rücken, als eine Bank im Nacken!</h2>
+        <p class="lead">
+          Willkommen bei der Direktkrediteplattform, bitte wähle das Projekt
+          aus, das du unterstützt hast!
+        </p>
+        {% else %}
+        <h2>{{ platformConfig.title }}</h2>
+        <p class="lead">{{ platformConfig.subTitle }}</p>
+        {% endif %}
+      </div>
+      <div class="input-group mb-3" style="margin-top: -20px">
+        <div class="input-group-prepend">
+          <span
+            class="input-group-text fa fa-search"
+            id="projectsearch-addon1"
+          ></span>
         </div>
-    </body>
-
+        <input
+          type="text"
+          id="projectsearch"
+          class="form-control"
+          placeholder="Projektsuche"
+          aria-label="Projectsuche"
+          aria-describedby="projectsearch-addon1"
+        />
+      </div>
+      <div class="row">
+        {% for project in platform.projects -%}
+        <div
+          class="col-lg-3 col-sm-6 col-xs-12 project-container"
+          data-name="{{ projectConfigs[project].projectname }}"
+        >
+          <a class="project-link" href="https://{{ url }}/{{ project }}">
+            <div class="card project-card">
+              <img
+                class="card-img-top"
+                src="https://{{ url }}/{{ project }}{{ projectConfigs[project].logo_select or projectConfigs[project].logo }}"
+                style="height: 100px; width: auto; object-fit: contain"
+              />
+              <div class="card-body text-center">
+                <h5 class="card-title">
+                  {{ projectConfigs[project].projectname }}
+                </h5>
+              </div>
+            </div>
+          </a>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </body>
 </html>

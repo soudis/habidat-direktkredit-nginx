@@ -1,9 +1,22 @@
 #!/usr/bin/env python3
 
-from jinja2 import Environment, FileSystemLoader
-import json,  os, filecmp, sys, shutil, subprocess, logging, traceback
-from urllib.request import urlopen
+import filecmp
+import json
+import logging
+import os
+import shutil
+import subprocess
+import sys
+import traceback
+from functools import cmp_to_key
 from urllib.error import URLError
+from urllib.request import urlopen
+
+from jinja2 import Environment, FileSystemLoader
+
+
+def cmp(a, b):
+    return (a > b) - (a < b) 
 
 try: 
 
@@ -33,13 +46,13 @@ try:
 	# load project configs (if exists)
 	if os.path.isfile("projectConfigs.json"):
 		with open('projectConfigs.json', 'r') as json_file:
-		  projectConfigs = json.load(json_file)	
+			projectConfigs = json.load(json_file)	
 
 	platformConfigs = {}
 	# load optinal platform configs (if exists)
 	if os.path.isfile("platforms.json"):
 		with open('platforms.json', 'r') as json_file:
-		  platformConfigs = json.load(json_file)			  
+			platformConfigs = json.load(json_file)			  
 
 	#print(projects)	
 
@@ -62,7 +75,7 @@ try:
 
 	# write projectConfigs
 	with open('projectConfigs.json', 'w') as outfile:
-	    json.dump(projectConfigs, outfile)
+		json.dump(projectConfigs, outfile)
 
 	# generate nginx configuration and html templates
 	domains = []
@@ -75,6 +88,11 @@ try:
 			filename = 'dk_' + siteUrl + '.conf'
 			template.stream(sslProvider=os.environ['SSL_PROVIDER'], url=siteUrl, container=projects[projectId]['container']).dump(nginxTmpDir + filename)
 		else:
+
+			def compare(x, y):
+				return cmp(projectConfigs[x]['projectname'].casefold(), projectConfigs[y]['projectname'].casefold())
+
+			site['projects'] = sorted(site['projects'], key=cmp_to_key(compare))
 			log.info('Generate project platform %s' % siteUrl)
 			template = env.get_template('nginx_platform.conf')
 			filename = 'dk_' + siteUrl + '.conf'
@@ -92,7 +110,7 @@ try:
 	domainsString = ','.join(domains)
 
 	with open('domains.txt', 'w') as outfile:
-	    outfile.write(domainsString)
+		outfile.write(domainsString)
 
 	# compare new config 
 	nginxChanged = False

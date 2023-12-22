@@ -1,7 +1,9 @@
 config
-static
+static/*.html
 cert
 ./conf.d
 docker-compose.yml
 projects.json
 platforms.json
+build.sh
+push.sh

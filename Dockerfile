@@ -14,7 +14,7 @@ ADD ./nginx /etc/nginx
 ADD . /habidat
 
 RUN \
-  mkdir /habidat/static \
+  mkdir -p /habidat/static \
   && chown -R nginx:nginx /habidat
 
 ADD . /habidat
