@@ -54,6 +54,12 @@ try:
 		with open('platforms.json', 'r') as json_file:
 			platformConfigs = json.load(json_file)			  
 
+  # load custom routes
+	customConfigs = {}
+	if os.path.isfile("custom.json"):
+		with open('custom.json', 'r') as json_file:
+			customConfigs = json.load(json_file)						
+
 	#print(projects)	
 
 	# build platforms dictionary
@@ -106,6 +112,13 @@ try:
 			    template.render(platform=site, url=siteUrl, platformConfig=platformConfig, projects=projects, projectConfigs=projectConfigs)
 			)
 			index_file.close()
+
+	for customId in customConfigs:
+		custom = customConfigs[customId]
+		template = env.get_template('nginx_single.conf')
+		filename = 'dk_custom_' + siteUrl + '.conf'
+		template.stream(sslProvider=os.environ['SSL_PROVIDER'], url=custom['url'], container=custom['container']).dump(nginxTmpDir + filename)
+		domains.append(custom['url'])
 
 	domainsString = ','.join(domains)
 
