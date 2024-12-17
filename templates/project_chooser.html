@@ -24,6 +24,7 @@
     <div
       class="container-fluid col-xl-8 col-xl-offset-2 col-lg-12"
       id="root-container"
+      style="min-height: calc(100vh - 120px);"
     >
       <div class="jumbotron">
         {% if platformConfig == 'default' %}
@@ -76,6 +77,23 @@
         </div>
         {% endfor %}
       </div>
+     
+    </div>    
+    <div id="footer" class="container-fluid col-xl-8 col-xl-offset-2 col-lg-12">
+    <footer class="d-flex flex-wrap justify-content-between align-items-center py-3 mt-4 border-top">
+      <p class="col-md-4 mb-0 text-muted">
+        <img src="https://mirrors.creativecommons.org/presskit/icons/cc.svg?ref=chooser-v1" alt="Creative Commons icons CC" height="22px">
+        <img src="https://mirrors.creativecommons.org/presskit/icons/by.svg?ref=chooser-v1" alt="Creative Commons icons BY" height="22px">
+        <span> Creative Commons </span><a href="https://creativecommons.org/licenses/by/4.0/deed.de">BY-SA 4.0</a><span> Lizenz</span></p>
+        <ul class="nav col-md-4 justify-content-end">
+          <li class="nav-item">
+            <a class="nav-link" href="/{{ platform.projects[0] }}/imprint">Impressum &amp; Datenschutz</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="https://github.com/soudis/habidat-direktkredit/" target="_blank"> <img src="/{{ platform.projects[0] }}/public/github.png" height="22px"><span> github</span></a>
+          </li>
+        </ul>
+      </footer>    
     </div>
-  </body>
+</body>
 </html>
