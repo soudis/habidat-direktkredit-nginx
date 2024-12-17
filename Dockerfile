@@ -2,13 +2,9 @@ FROM nginx:stable
 
 RUN \
   apt-get update \
-  && apt-get -y install python3 python3-pip python3-venv \
+  && apt-get -y install python3 python3-pip python3-venv python3-jinja2 python3-simplejson \
   && apt-get clean \
   && rm -rf /var/lib/apt/lists/*
-
-RUN \
-   pip3 install jinja2 simplejson
-
 
 ADD ./nginx /etc/nginx
 ADD . /habidat
